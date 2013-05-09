@@ -14,7 +14,13 @@
 | path to your installation.
 |
 */
-$config['base_url']	= '';
+if(strstr($_SERVER['HTTP_HOST'], 'localhost') === FALSE) {
+    $baseUrl = "http://azns.jupe.pl/";
+} else {
+    $baseUrl = "http://localhost/laska/";
+}
+
+$config['base_url']	= $baseUrl;
 
 /*
 |--------------------------------------------------------------------------
