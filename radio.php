@@ -16,6 +16,7 @@ id="mediaPlayer" name="mediaPlayer" showcontrols="false" width="480" height="240
 src="http://195.150.20.244:84/RMFFM48" autostart="false" loop="true"></EMBED>
 </OBJECT>
 
+<embed type="application/x-shockwave-flash" flashvars="audioUrl=http://files.kusmierz.be/rmf/rmf.mp3" src="http://www.google.com/reader/ui/3523697345-audio-player.swf"  width="400" height="27" quality="best"></embed>
 
 </body>
 </html>
