@@ -5,6 +5,8 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 		<link rel="stylesheet" href="<?php echo $baseUrl ?>styles/core.css" type="text/css" />
 		<title><?php echo $title; ?></title>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="<?php echo $baseUrl ?>js/radio.js"></script>
 	</head>
 	<body>
 

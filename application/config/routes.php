@@ -37,6 +37,7 @@
 | in the URL cannot be matched to a valid route.
 |
 */
+$route['playlist/(:num)'] = "lists/xajax_getPlaylist/$1";
 $route['station/(:any)'] = "lists/station/$1";
 $route['default_controller'] = "lists";
 $route['404_override'] = '';

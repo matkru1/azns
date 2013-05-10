@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * Model do list radia
@@ -6,7 +6,7 @@
 class ModelLists extends CI_Model {
     
     public function __construct() {
-        $this->load->library('firephp');
+        // $this->load->library('firephp');
         $this->load->helper('url');
     }
 
@@ -61,7 +61,8 @@ class ModelLists extends CI_Model {
         $stations = array();
         foreach($xml->station as $s) {
             $id = $s->{'@attributes'}->id;
-            $url = site_url('station/'.$id);
+            $nameId = $s->{'@attributes'}->idname;
+            $url = site_url('station/'.$id.'/'.$nameId);
             $stations[$id] = array("name"=>$s->{'@attributes'}->name, "url"=>$url);
         }
         return $stations;
