@@ -3,7 +3,7 @@
  */
 
 function getPlaylist() {
-	var id = $('#radioId').val(), baseUrl = $('#baseUrl').val(), url = baseUrl + "index.php/lists/xajax_getPlaylist/3";
+	var id = $('#radioId').val(), baseUrl = $('#baseUrl').val(), url = baseUrl + "index.php/lists/xajax_getPlaylist/"+id;
 	$.ajax({
 		url : url,
 		dataType : 'json',
@@ -43,6 +43,6 @@ function reloadPlaylist(list) {
 
 
 $(document).ready(function() {
-	setInterval(getPlaylist,120000);
+	setInterval(getPlaylist,5000);
 	
 });
