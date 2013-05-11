@@ -49,15 +49,18 @@ class ModelLists extends CI_Model {
     }
 	
     public function insertCurrent($list){
-		foreach ($list as $r) {
+			foreach ($list as $r) {
                 if ($r->order == 0) {
 				$this->load->database();
-				$query = $this->db->query('REPLACE INTO `muzyka` (godz, autor, tytul) VALUES ("'.$r->start.'", "'.$r->author.'", "'.$r->title.'")');	
-				
-			   } 
-	
-		}
+				$query = $this->db->query('Select * from `muzyka` where (godz="'.$r->start.'" and autor="'.$r->author.'") and tytul="'.$r->title.'" ');
+				if ($query->num_rows() == 0)
+				{
+				$query = $this->db->query('Insert INTO `muzyka` (godz, autor, tytul) VALUES ("'.$r->start.'", "'.$r->author.'", "'.$r->title.'")');	
+				}
+			  } 
+			}
 	}
+	
     public function getStations() {
         $url = "http://www.rmfon.pl/xml/stations.txt";
         $xmlPlain = $this->curl_download($url);
