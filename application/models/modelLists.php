@@ -52,7 +52,7 @@ class ModelLists extends CI_Model {
 		foreach ($list as $r) {
                 if ($r->order == 0) {
 				$this->load->database();
-				$query = $this->db->query('INSERT INTO `muzyka` (autor, tytul) VALUES ("'.$r->author.'", "'.$r->title.'")');	
+				$query = $this->db->query('REPLACE INTO `muzyka` (godz, autor, tytul) VALUES ("'.$r->start.'", "'.$r->author.'", "'.$r->title.'")');	
 				
 			   } 
 	
