@@ -47,7 +47,17 @@ class ModelLists extends CI_Model {
         $list = $this->curl_download($url);
         return json_decode($list);
     }
-    
+	
+    public function insertCurrent($list){
+		foreach ($list as $r) {
+                if ($r->order == 0) {
+				$this->load->database();
+				$query = $this->db->query('INSERT INTO `muzyka` (autor, tytul) VALUES ("'.$r->author.'", "'.$r->title.'")');	
+				
+			   } 
+	
+		}
+	}
     public function getStations() {
         $url = "http://www.rmfon.pl/xml/stations.txt";
         $xmlPlain = $this->curl_download($url);
