@@ -84,6 +84,36 @@ class ModelLists extends CI_Model {
 		echo '</br>';
 		}
 	 }
+	
+	public function sqlToXml($queryResult, $rootElementName, $childElementName)
+	{ 
+    $xmlData = "<?xml version='1.0' encoding='utf-8' ?>n"; 
+    $xmlData .= "<" . $rootElementName . ">";
+ 
+    while($record = mysql_fetch_object($queryResult))
+    {
+        $xmlData .= "<" . $childElementName . ">";
+ 
+        for ($i = 0; $i < mysql_num_fields($queryResult); $i++)
+        { 
+            $fieldName = mysql_field_name($queryResult, $i); 
+ 
+            /* Pobieranie nazwy kolumny */
+            $xmlData .= "<" . $fieldName . ">";
+            if(!empty($record->$fieldName))
+                $xmlData .= $record->$fieldName; 
+            else
+                $xmlData .= "null"; 
+ 
+            $xmlData .= "</" . $fieldName . ">"; 
+        } 
+        $xmlData .= "</" . $childElementName . ">"; 
+    } 
+    $xmlData .= "</" . $rootElementName . ">"; 
+ 
+    return $xmlData; 
+	}
+	
     public function getStations() {
         $url = "http://www.rmfon.pl/xml/stations.txt";
         $xmlPlain = $this->curl_download($url);
