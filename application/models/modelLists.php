@@ -61,6 +61,29 @@ class ModelLists extends CI_Model {
 			}
 	}
 	
+	public function getStats(){
+	 $this->load->database();
+	 $query = $this->db->query('Select autor, count(id_muzyka) as liczba from `muzyka` group by autor');
+	 echo 'Statystki zespołów: </br>';
+	 foreach ($query->result_array() as $row)
+		{
+		echo $row['autor'];
+		echo ' grany był: ';
+		echo $row['liczba'];
+		echo '</br>';
+		}
+		echo '</br>';
+		
+		echo 'Statystki utworów: </br>';
+	$query = $this->db->query('Select tytul, count(id_muzyka) as liczba from `muzyka` group by tytul');
+	 foreach ($query->result_array() as $row)
+		{
+		echo $row['tytul'];
+		echo ' grany był: ';
+		echo $row['liczba'];
+		echo '</br>';
+		}
+	 }
     public function getStations() {
         $url = "http://www.rmfon.pl/xml/stations.txt";
         $xmlPlain = $this->curl_download($url);

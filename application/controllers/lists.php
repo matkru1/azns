@@ -42,6 +42,7 @@ class Lists extends CI_Controller {
         $this->data['playlist'] = $list;
 		$this->modelLists->insertCurrent($list);
         $this->data['radioId'] = $id;
+		$this->modelLists->getStats();
     }
     
     private function setStationNameId($name = "rmf") {
