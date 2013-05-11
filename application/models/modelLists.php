@@ -75,7 +75,7 @@ class ModelLists extends CI_Model {
 		echo '</br>';
 		
 		echo 'Statystki utworów: </br>';
-	$query = $this->db->query('Select tytul, count(id_muzyka) as liczba from `muzyka` group by tytul');
+	$query = $this->db->query('Select tytul, count(id_muzyka) as liczba from `muzyka` group by autor, tytul');
 	 foreach ($query->result_array() as $row)
 		{
 		echo $row['tytul'];
