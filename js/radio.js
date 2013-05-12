@@ -15,7 +15,6 @@ function getPlaylist() {
 }
 
 function reloadPlaylist(list) {
-	$('#playlist').html('');
 	var html = '';
 	for (var i = 0; i < list.length; i++) {
 		var classs = '';
@@ -38,11 +37,11 @@ function reloadPlaylist(list) {
 		html += '<div class="clear"></div>';
 		html += '</div>';
 	}
+	$('#playlist').html('');
 	$('#playlist').html(html);
 }
 
-
 $(document).ready(function() {
-	setInterval(getPlaylist,5000);
+	setInterval(getPlaylist,30000);
 	
 });

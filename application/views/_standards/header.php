@@ -6,7 +6,17 @@
 		<link rel="stylesheet" href="<?php echo $baseUrl ?>styles/core.css" type="text/css" />
 		<title><?php echo $title; ?></title>
 		<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-        <script type="text/javascript" src="<?php echo $baseUrl ?>js/radio.js"></script>
+        
 	</head>
 	<body>
+	    <div class="container">
+    	    <div id="login">
+    	        <div>
+    	            <?php if(isset($userName)) { ?>
+    	               Jesteś zalogowany jako <?php echo $userName; ?> <a href="<?php echo $baseUrl; ?>index.php/logout" title="Wyloguj">(wyloguj)</a> 
+    	            <?php
+                        }
+                    ?>
+    	        </div>
+    	    </div>
 

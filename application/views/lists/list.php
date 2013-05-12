@@ -1,4 +1,3 @@
-<div class="container">
     <input type="hidden" name="radioId" id="radioId" value="<?php echo $radioId ?>" />
     <input type="hidden" name="baseUrl" id="baseUrl" value="<?php echo $baseUrl ?>" />
 	<div class="left">
@@ -22,7 +21,7 @@
                 echo '</div>';
                 echo '<div class="entryData">';
                 echo '<div class="title">';
-                echo $r->start . ' <span class="author">' . $r->author . '</span> ' . $r->title;
+                echo $r->stime . ' <span class="author">' . $r->author . '</span> ' . $r->title;
                 echo '</div>';
                 echo '</div>';
                 echo '<div class="clear"></div>';
@@ -40,5 +39,4 @@
 		?>
 		</ul>
 	</div>
-
-</div>
+	<script type="text/javascript" src="<?php echo $baseUrl ?>js/radio.js"></script>
