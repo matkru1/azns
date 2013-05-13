@@ -29,10 +29,6 @@ class ModelAuth extends CI_Model {
             $this->load->library('twitter/twitteroauth', $twitterParam, 'twitter');
             $access_token = $this->twitter->getAccessToken($_REQUEST['oauth_verifier']);
             if ($this->twitter->http_code == '200') {
-                $sess = array(
-                    "status" => "verified",
-                    "request_vars" => $access_token
-                );
                 $_SESSION['status'] = "verified";
                 $_SESSION['request_vars'] = $access_token;
 
@@ -59,11 +55,6 @@ class ModelAuth extends CI_Model {
             $this->load->library('twitter/twitteroauth', $twitterParam, 'twitter');
             $request_token = $this->twitter->getRequestToken($this->OAUTH_CALLBACK);
 
-            $sess = array(
-                "token" => $request_token['oauth_token'],
-                "token_secret" => $request_token['oauth_token_secret']
-            );
-            $this->session->set_userdata($sess);
             $_SESSION['token'] = $request_token['oauth_token'];
             $_SESSION['token_secret'] = $request_token['oauth_token_secret'];
             if ($this->twitter->http_code == '200') {

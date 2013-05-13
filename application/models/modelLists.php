@@ -18,7 +18,6 @@ class ModelLists extends CI_Model {
         }
         $ch = curl_init();
 
-
         curl_setopt($ch, CURLOPT_URL, $Url);
         curl_setopt($ch, CURLOPT_REFERER, "http://www.rmfon.pl/");
         curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:20.0) Gecko/20100101 Firefox/20.0");
@@ -70,6 +69,10 @@ class ModelLists extends CI_Model {
         $url = "http://www.rmfon.pl/xml/stations.txt";
         $xmlPlain = $this->curl_download($url);
         $stations = $this->parseStations($xmlPlain);
+        // echo '<pre>';
+        // print_r($stations);
+        // echo '</pre>';
+        // die();
         return $stations;
     }
 
@@ -80,9 +83,11 @@ class ModelLists extends CI_Model {
         foreach ($xml->station as $s) {
             $id = $s->{'@attributes'}->id;
             $nameId = $s->{'@attributes'}->idname;
-            $url = site_url('station/' . $id . '/' . $nameId);
+            $name = $s->{'@attributes'}->name;
+            $urlName = str_replace(' ', '__S__', $name);
+            $url = site_url('station/' . $id . '/' . $nameId. '/' . $urlName);
             $stations[$id] = array(
-                "name" => $s->{'@attributes'}->name,
+                "name" => $name,
                 "url" => $url
             );
         }

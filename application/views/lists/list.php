@@ -1,10 +1,13 @@
 <input type="hidden" name="radioId" id="radioId" value="<?php echo $radioId ?>" />
 <input type="hidden" name="baseUrl" id="baseUrl" value="<?php echo $baseUrl ?>" />
+<div id="stationName">Odtwarzane radio: <b><?php echo $name ?></b></div>
 <div class="left">
+    <div id="player">
 	<embed type="application/x-shockwave-flash"
 	flashvars="audioUrl=http://files.kusmierz.be/rmf/<?php echo $nameId ?>.mp3"
 	src="http://www.google.com/reader/ui/3523697345-audio-player.swf"
 	width="400" height="27" quality="best"></embed>
+	</div>
 	<div id="playlist">
 		<?php
         foreach ($playlist as $r) {
@@ -48,7 +51,7 @@
 				<ul>
 					<?php
                     foreach ($stats['titles'] as $title) {
-                        echo '<li>' . $title['autor'] . ' - ' . $title['tytul'] .  ' grał: ' . $title['liczba'] . '</li>';
+                        echo '<li>' . $title['autor'] . ' - ' . $title['tytul'] . ' grał: ' . $title['liczba'] . '</li>';
                     }
 					?>
 				</ul>

@@ -27,15 +27,15 @@ class Lists extends CI_Controller {
 
     }
 
-    public function station($id, $stationId) {
+    public function station($id, $stationId, $name) {
         $this->setStationsList();
         $this->setStationPlaylist($id);
-        $this->setStationNameId($stationId);
+        $this->setStationNameId($stationId, $name);
         $this->setStats();
         $this->view();
     }
 
-    private function setStationsList() {
+    public function setStationsList() {
         $this->data['stations'] = $this->modelLists->getStations();
     }
 
@@ -46,8 +46,10 @@ class Lists extends CI_Controller {
         $this->data['radioId'] = $id;
     }
 
-    private function setStationNameId($name = "rmf") {
-        $this->data['nameId'] = $name;
+    private function setStationNameId($nameId = "rmf", $name = "RMF FM") {
+        $this->data['nameId'] = $nameId;
+        $name = str_replace('__S__', ' ', $name);
+        $this->data['name'] = $name;
     }
 
     private function setStats() {
