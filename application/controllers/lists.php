@@ -17,7 +17,6 @@ class Lists extends CI_Controller {
 
         $this->data['title'] = "Lista";
         $this->data['baseUrl'] = base_url();
-        // $this->firephp->log($_SESSION);
         $this->isLogin();
     }
 
@@ -25,6 +24,7 @@ class Lists extends CI_Controller {
         $this->setStationsList();
         $this->setStationPlaylist($this->defaultStationId);
         $this->setStationNameId();
+        $this->setStats();
         $this->view();
 
     }
@@ -33,6 +33,7 @@ class Lists extends CI_Controller {
         $this->setStationsList();
         $this->setStationPlaylist($id);
         $this->setStationNameId($stationId);
+        $this->setStats();
         $this->view();
     }
 
@@ -43,14 +44,17 @@ class Lists extends CI_Controller {
     private function setStationPlaylist($id) {
         $list = $this->modelLists->getStationPlaylist($id);
         $this->data['playlist'] = $list;
-        // $this->firephp->log($list);
         $this->modelLists->insertCurrent($list);
         $this->data['radioId'] = $id;
-        // $this->modelLists->getStats();
     }
 
     private function setStationNameId($name = "rmf") {
         $this->data['nameId'] = $name;
+    }
+
+    private function setStats() {
+        $stats = $this->modelLists->getStats();
+        $this->data['stats'] = $stats;
     }
 
     private function isLogin() {
@@ -70,6 +74,16 @@ class Lists extends CI_Controller {
         $list = $this->modelLists->getStationPlaylist($id);
         $this->modelLists->insertCurrent($list);
         die(json_encode($list));
+    }
+
+    public function xajax_getStats() {
+        $stats = $this->modelLists->getStats();
+        die(json_encode($stats));
+    }
+
+    public function generateXmlStats() {
+        $this->modelLists->generateXmlStats();
+        redirect(base_url('download/statystyka.xml'));
     }
 
 }

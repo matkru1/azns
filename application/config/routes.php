@@ -40,9 +40,13 @@
 //LOGOWANIE
 $route['login'] = "auth/login";
 $route['logout'] = "auth/logout";
+
 $route['radio'] = "lists/radio";
 $route['playlist/(:num)'] = "lists/xajax_getPlaylist/$1";
 $route['station/(:any)'] = "lists/station/$1";
+
+$route['stats'] = "lists/xajax_getStats";
+$route['generateStats'] = "lists/generateXmlStats";
 $route['default_controller'] = "auth";
 $route['404_override'] = '';
 

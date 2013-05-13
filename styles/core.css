@@ -54,9 +54,14 @@ a:hover {
 	border: 1px solid;
 }
 .cover {
-	width: 100px;
-	height: 100px;
+	width: 50px;
+	height: 50px;
 	float: left;
+}
+
+.cover img {
+	width: 50px;
+	height: 50px;
 }
 
 .entryData {

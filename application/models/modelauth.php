@@ -7,7 +7,7 @@ class ModelAuth extends CI_Model {
 
     private $CONSUMER_KEY = 'OyplEQjLvJ66a2S1y7gfyQ';
     private $CONSUMER_SECRET = 'zHQ91nyWDctWfb198k0z0KSP4mOwT5yKWqrNej0oaGU';
-    private $OAUTH_CALLBACK = 'http://localhost/laska/index.php/login';
+    private $OAUTH_CALLBACK = 'http://localhost/radio/index.php/login';
     // $, $consumer_secret, $oauth_token
 
     function __construct() {
@@ -21,7 +21,6 @@ class ModelAuth extends CI_Model {
 
         // if (isset($_REQUEST['oauth_token']) && $this->session->userdata('token') !== $_REQUEST['oauth_token']) {
         if (isset($_REQUEST['oauth_token']) && $_SESSION['token'] !== $_REQUEST['oauth_token']) {
-            // $this->firephp->log($this->session->all_userdata(), 'old');
             /*
              echo '<pre>';
              echo print_r($this->session->all_userdata());

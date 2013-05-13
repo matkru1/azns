@@ -25,13 +25,13 @@ function reloadPlaylist(list) {
 		}
 		html += '<div class="' + classs + '">';
 		html += '<div class="cover">';
-		if (list[i].coverUrl != '') {
+		if (list[i].coverUrl != null) {
 			html += '<img src="' + list[i].coverUrl + '" alt="' + list[i].author + '"/>';
 		}
 		html += '</div>';
 		html += '<div class="entryData">';
 		html += '<div class="title">';
-		html += list[i].start + ' <span class="author">' + list[i].author + '</span> '+list[i].title;
+		html += list[i].stime + ' <span class="author">' + list[i].author + '</span> '+list[i].title;
 		html += '</div>';
 		html += '</div>';
 		html += '<div class="clear"></div>';

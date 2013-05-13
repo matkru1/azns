@@ -17,7 +17,7 @@
 if(strstr($_SERVER['HTTP_HOST'], 'localhost') === FALSE) {
     $baseUrl = "http://azns.jupe.pl/";
 } else {
-    $baseUrl = "http://localhost/laska/";
+    $baseUrl = "http://localhost/radio/";
 }
 
 $config['base_url']	= $baseUrl;

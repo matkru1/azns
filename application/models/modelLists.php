@@ -9,7 +9,7 @@ class ModelLists extends CI_Model {
 
     private $CONSUMER_KEY = 'OyplEQjLvJ66a2S1y7gfyQ';
     private $CONSUMER_SECRET = 'zHQ91nyWDctWfb198k0z0KSP4mOwT5yKWqrNej0oaGU';
-    private $OAUTH_CALLBACK = 'http://localhost/laska/index.php/login';
+    private $OAUTH_CALLBACK = 'http://localhost/radio/index.php/login';
 
     public function __construct() {
         // $this->load->library('firephp');
@@ -29,9 +29,9 @@ class ModelLists extends CI_Model {
         // Set URL to download
         curl_setopt($ch, CURLOPT_URL, $Url);
         // Set a referer
-        curl_setopt($ch, CURLOPT_REFERER, "http://www.example.org/yay.htm");
+        curl_setopt($ch, CURLOPT_REFERER, "http://www.rmfon.pl/");
         // User agent
-        curl_setopt($ch, CURLOPT_USERAGENT, "MozillaXYZ/1.0");
+        curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:20.0) Gecko/20100101 Firefox/20.0");
         // Include header in result? (0 = yes, 1 = no)
         curl_setopt($ch, CURLOPT_HEADER, 0);
         // Should cURL return or print out the data? (true = return, false = print)
@@ -63,17 +63,24 @@ class ModelLists extends CI_Model {
         foreach ($list as $r) {
             if ($r->order == 0) {
                 $this->load->database();
-                $query = $this->db->query('Select * from `muzyka` where (godz="' . $r->start . '" and autor="' . $r->author . '") and tytul="' . $r->title . '" ');
+                $songdate = date('Y-m-d H:i:s', $r->timestamp);
+                $author = trim(addslashes($r->author));
+                $title = trim(addslashes($r->title));
+                $userId = $_SESSION['request_vars']['user_id'];
+                $sql = 'Select * from `muzyka` ' . ' where godz="' . $songdate . '" and autor="' . $author . '" and tytul="' . $title . '" and userId = ' . $userId;
+                $query = $this->db->query($sql);
                 if ($query->num_rows() == 0) {
-                    $query = $this->db->query('Insert INTO `muzyka` (godz, autor, tytul) VALUES ("' . $r->start . '", "' . $r->author . '", "' . $r->title . '")');
-                    $this->sendTweet($r->author, $r->title);
+                    $createdate = date('Y-m-d H:i:s');
+                    $sql = 'Insert INTO `muzyka` (godz, autor, tytul, userId, create_date) ' . ' VALUES ("' . $songdate . '", "' . $author . '", "' . $title . '", ' . $userId . ', "' . $createdate . '")';
+                    $query = $this->db->query($sql);
+                    $this->sendTweet($author, $title);
                 }
             }
         }
     }
 
     private function sendTweet($author, $title) {
-        $song = $author . (!empty($title) ? ' - ' . $title : '' ); 
+        $song = $author . (!empty($title) ? ' - ' . $title : '');
         $msg = "Aktualnie słucham: $song";
         $twitterParam = array(
             "consumer_key" => $this->CONSUMER_KEY,
@@ -87,24 +94,18 @@ class ModelLists extends CI_Model {
 
     public function getStats() {
         $this->load->database();
-        $query = $this->db->query('Select autor, count(id_muzyka) as liczba from `muzyka` group by autor');
-        echo 'Statystki zespołów: </br>';
-        foreach ($query->result_array() as $row) {
-            echo $row['autor'];
-            echo ' grany był: ';
-            echo $row['liczba'];
-            echo '</br>';
-        }
-        echo '</br>';
 
-        echo 'Statystki utworów: </br>';
-        $query = $this->db->query('Select tytul, count(id_muzyka) as liczba from `muzyka` group by autor, tytul');
-        foreach ($query->result_array() as $row) {
-            echo $row['tytul'];
-            echo ' grany był: ';
-            echo $row['liczba'];
-            echo '</br>';
-        }
+        $sql = 'SELECT autor, count( id_muzyka ) AS liczba ' . ' FROM `muzyka` ' . ' GROUP BY autor ' . ' ORDER BY liczba DESC ' . ' LIMIT 5 ';
+        $query = $this->db->query($sql);
+        $topAutors = $query->result_array();
+        $sql = 'SELECT autor, tytul, count(id_muzyka) AS liczba ' . ' FROM `muzyka` ' . ' GROUP BY autor, tytul ' . ' ORDER BY liczba DESC ' . ' LIMIT 5 ';
+        $query = $this->db->query($sql);
+        $topTitles = $query->result_array();
+        $top = array(
+            "autors" => $topAutors,
+            "titles" => $topTitles
+        );
+        return $top;
     }
 
     public function sqlToXml($queryResult, $rootElementName, $childElementName) {
@@ -131,6 +132,43 @@ class ModelLists extends CI_Model {
         $xmlData .= "</" . $rootElementName . ">";
 
         return $xmlData;
+    }
+
+    public function matkru() {
+        $student_info = $this->getStats();
+        // creating object of SimpleXMLElement
+        $xml_student_info = new SimpleXMLElement("<?xml version=\"1.0\"?><muzyka></muzyka>");
+
+        // function call to convert array to xml
+        $this->array_to_xml($student_info, $xml_student_info);
+
+        //saving generated xml file
+        $xml_student_info->asXML('./test.xml');
+
+    }
+
+    public function generateXmlStats() {
+        $this->load->library('arraytoxml', '', 'xml');
+        $data= $this->getStats();
+        $this->xml->toXml($data, 'muzyka');
+
+
+    }
+
+    // function defination to convert array to xml
+    private function array_to_xml($student_info, &$xml_student_info) {
+        foreach ($student_info as $key => $value) {
+            if (is_array($value)) {
+                if (!is_numeric($key)) {
+                    $subnode = $xml_student_info->addChild("$key");
+                    $this->array_to_xml($value, $subnode);
+                } else {
+                    $this->array_to_xml($value, $xml_student_info);
+                }
+            } else {
+                $xml_student_info->addChild("$key", "$value");
+            }
+        }
     }
 
     public function getStations() {
