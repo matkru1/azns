@@ -59,6 +59,52 @@ class ModelLists extends CI_Model {
         return $list;
     }
 
+    public function getStats() {
+        $this->load->database();
+        $userId = $_SESSION['request_vars']['user_id'];
+        $sql = 'SELECT autor, count( id_muzyka ) AS liczba ' 
+            . ' FROM `muzyka` ' 
+            . ' WHERE userId = ' . $userId . ' '
+            . ' GROUP BY autor ' . ' ORDER BY liczba DESC ' . ' LIMIT 5 ';
+        $query = $this->db->query($sql);
+        $topAutors = $query->result_array();
+        $sql = 'SELECT autor, tytul, count(id_muzyka) AS liczba ' 
+        . ' FROM `muzyka` '
+        . ' WHERE userId = ' . $userId . ' ' 
+        . ' GROUP BY autor, tytul ' 
+        . ' ORDER BY liczba DESC ' . ' LIMIT 5 ';
+        $query = $this->db->query($sql);
+        $topTitles = $query->result_array();
+        $top = array(
+            "autors" => $topAutors,
+            "titles" => $topTitles
+        );
+        return $top;
+    }
+
+    public function getStations() {
+        $url = "http://www.rmfon.pl/xml/stations.txt";
+        $xmlPlain = $this->curl_download($url);
+        $stations = $this->parseStations($xmlPlain);
+        return $stations;
+    }
+
+    public function parseStations($xmlStations) {
+        $xml = simplexml_load_string($xmlStations);
+        $xml = json_decode(json_encode($xml));
+        $stations = array();
+        foreach ($xml->station as $s) {
+            $id = $s->{'@attributes'}->id;
+            $nameId = $s->{'@attributes'}->idname;
+            $url = site_url('station/' . $id . '/' . $nameId);
+            $stations[$id] = array(
+                "name" => $s->{'@attributes'}->name,
+                "url" => $url
+            );
+        }
+        return $stations;
+    }
+
     public function insertCurrent($list) {
         foreach ($list as $r) {
             if ($r->order == 0) {
@@ -91,107 +137,11 @@ class ModelLists extends CI_Model {
         $this->load->library('twitter/twitteroauth', $twitterParam, 'twitter');
         $this->twitter->post('statuses/update', array('status' => $msg));
     }
-
-    public function getStats() {
-        $this->load->database();
-
-        $sql = 'SELECT autor, count( id_muzyka ) AS liczba ' . ' FROM `muzyka` ' . ' GROUP BY autor ' . ' ORDER BY liczba DESC ' . ' LIMIT 5 ';
-        $query = $this->db->query($sql);
-        $topAutors = $query->result_array();
-        $sql = 'SELECT autor, tytul, count(id_muzyka) AS liczba ' . ' FROM `muzyka` ' . ' GROUP BY autor, tytul ' . ' ORDER BY liczba DESC ' . ' LIMIT 5 ';
-        $query = $this->db->query($sql);
-        $topTitles = $query->result_array();
-        $top = array(
-            "autors" => $topAutors,
-            "titles" => $topTitles
-        );
-        return $top;
-    }
-
-    public function sqlToXml($queryResult, $rootElementName, $childElementName) {
-        $xmlData = "<?xml version='1.0' encoding='utf-8' ?>n";
-        $xmlData .= "<" . $rootElementName . ">";
-
-        while ($record = mysql_fetch_object($queryResult)) {
-            $xmlData .= "<" . $childElementName . ">";
-
-            for ($i = 0; $i < mysql_num_fields($queryResult); $i++) {
-                $fieldName = mysql_field_name($queryResult, $i);
-
-                /* Pobieranie nazwy kolumny */
-                $xmlData .= "<" . $fieldName . ">";
-                if (!empty($record->$fieldName))
-                    $xmlData .= $record->$fieldName;
-                else
-                    $xmlData .= "null";
-
-                $xmlData .= "</" . $fieldName . ">";
-            }
-            $xmlData .= "</" . $childElementName . ">";
-        }
-        $xmlData .= "</" . $rootElementName . ">";
-
-        return $xmlData;
-    }
-
-    public function matkru() {
-        $student_info = $this->getStats();
-        // creating object of SimpleXMLElement
-        $xml_student_info = new SimpleXMLElement("<?xml version=\"1.0\"?><muzyka></muzyka>");
-
-        // function call to convert array to xml
-        $this->array_to_xml($student_info, $xml_student_info);
-
-        //saving generated xml file
-        $xml_student_info->asXML('./test.xml');
-
-    }
-
+    
     public function generateXmlStats() {
         $this->load->library('arraytoxml', '', 'xml');
         $data= $this->getStats();
         $this->xml->toXml($data, 'muzyka');
-
-
-    }
-
-    // function defination to convert array to xml
-    private function array_to_xml($student_info, &$xml_student_info) {
-        foreach ($student_info as $key => $value) {
-            if (is_array($value)) {
-                if (!is_numeric($key)) {
-                    $subnode = $xml_student_info->addChild("$key");
-                    $this->array_to_xml($value, $subnode);
-                } else {
-                    $this->array_to_xml($value, $xml_student_info);
-                }
-            } else {
-                $xml_student_info->addChild("$key", "$value");
-            }
-        }
-    }
-
-    public function getStations() {
-        $url = "http://www.rmfon.pl/xml/stations.txt";
-        $xmlPlain = $this->curl_download($url);
-        $stations = $this->parseStations($xmlPlain);
-        return $stations;
-    }
-
-    public function parseStations($xmlStations) {
-        $xml = simplexml_load_string($xmlStations);
-        $xml = json_decode(json_encode($xml));
-        $stations = array();
-        foreach ($xml->station as $s) {
-            $id = $s->{'@attributes'}->id;
-            $nameId = $s->{'@attributes'}->idname;
-            $url = site_url('station/' . $id . '/' . $nameId);
-            $stations[$id] = array(
-                "name" => $s->{'@attributes'}->name,
-                "url" => $url
-            );
-        }
-        return $stations;
     }
 
 }

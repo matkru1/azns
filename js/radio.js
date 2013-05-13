@@ -3,7 +3,7 @@
  */
 
 function getPlaylist() {
-	var id = $('#radioId').val(), baseUrl = $('#baseUrl').val(), url = baseUrl + "index.php/lists/xajax_getPlaylist/"+id;
+	var id = $('#radioId').val(), baseUrl = $('#baseUrl').val(), url = baseUrl + "index.php/lists/xajax_getPlaylist/" + id;
 	$.ajax({
 		url : url,
 		dataType : 'json',
@@ -31,7 +31,7 @@ function reloadPlaylist(list) {
 		html += '</div>';
 		html += '<div class="entryData">';
 		html += '<div class="title">';
-		html += list[i].stime + ' <span class="author">' + list[i].author + '</span> '+list[i].title;
+		html += list[i].stime + ' <span class="author">' + list[i].author + '</span> ' + list[i].title;
 		html += '</div>';
 		html += '</div>';
 		html += '<div class="clear"></div>';
@@ -41,7 +41,42 @@ function reloadPlaylist(list) {
 	$('#playlist').html(html);
 }
 
-$(document).ready(function() {
-	setInterval(getPlaylist,30000);
+function getStats() {
+	var baseUrl = $('#baseUrl').val(), url = baseUrl + "index.php/lists/xajax_getStats";
+	$.ajax({
+		url : url,
+		dataType : 'json',
+		type : "GET",
+		success : function(response) {
+			reloadStats(response);
+		}
+	});
+}
+
+function reloadStats(list) {
+	var html = '';
+	var autors = list.autors;
+	html += '<ul>';
+	for (var i = 0; i < autors.length; i++) {
+		html += '<li>' + autors[i].autor +  ' grał: ' + autors[i].liczba + '</li>';
+	}
+	html += '</ul>';
+	$('#stats .autors .list').html('');
+	$('#stats .autors .list').html(html);
 	
+	var titles = list.titles;
+	html += '<ul>';
+	for (var i = 0; i < titles.length; i++) {
+		html += '<li>' + titles[i].autor + ' - ' + titles[i].tytul +  ' grał: ' + titles[i].liczba + '</li>';
+	}
+	html += '</ul>';
+	$('#stats .titles .list').html('');
+	$('#stats .titles .list').html(html);
+}
+
+
+$(document).ready(function() {
+	setInterval(getPlaylist, 30000);
+	setInterval(getStats, 30000);
+
 });
