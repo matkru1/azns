@@ -1,7 +1,3 @@
-/**
- * @author Maciek
- */
-
 function getPlaylist() {
 	var id = $('#radioId').val(), baseUrl = $('#baseUrl').val(), url = baseUrl + "index.php/lists/xajax_getPlaylist/" + id;
 	$.ajax({

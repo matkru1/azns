@@ -2,9 +2,6 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-/**
- * Model do list radia
- */
 class ModelLists extends CI_Model {
 
     private $CONSUMER_KEY = 'OyplEQjLvJ66a2S1y7gfyQ';
@@ -12,36 +9,23 @@ class ModelLists extends CI_Model {
     private $OAUTH_CALLBACK = 'http://localhost/radio/index.php/login';
 
     public function __construct() {
-        // $this->load->library('firephp');
         $this->load->helper('url');
     }
 
     public function curl_download($Url) {
-        // is cURL installed yet?
         if (!function_exists('curl_init')) {
             die('Sorry cURL is not installed!');
         }
-        // OK cool - then let's create a new cURL resource handle
         $ch = curl_init();
 
-        // Now set some options (most are optional)
 
-        // Set URL to download
         curl_setopt($ch, CURLOPT_URL, $Url);
-        // Set a referer
         curl_setopt($ch, CURLOPT_REFERER, "http://www.rmfon.pl/");
-        // User agent
         curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:20.0) Gecko/20100101 Firefox/20.0");
-        // Include header in result? (0 = yes, 1 = no)
         curl_setopt($ch, CURLOPT_HEADER, 0);
-        // Should cURL return or print out the data? (true = return, false = print)
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        // Timeout in seconds
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-        // Download the given URL, and return output
         $output = curl_exec($ch);
-
-        // Close the cURL resource, and free system resources
         curl_close($ch);
 
         return $output;

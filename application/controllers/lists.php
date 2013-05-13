@@ -11,8 +11,6 @@ class Lists extends CI_Controller {
         parent::__construct();
         $this->load->model('modelLists');
 
-        // $this->load->library('firephp');
-
         $this->load->helper('url');
 
         $this->data['title'] = "Lista";

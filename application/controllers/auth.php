@@ -1,8 +1,5 @@
 <?php
 session_start();
-/**
- *
- */
 class Auth extends CI_Controller {
 
     private $data = array();
@@ -10,8 +7,6 @@ class Auth extends CI_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model('modelAuth', 'model');
-        // $this->load->library('firephp');
-        $this->load->library('session');
         $this->load->helper('url');
 
         $this->data['title'] = "Logowanie";
@@ -19,7 +14,6 @@ class Auth extends CI_Controller {
     }
 
     public function index() {
-        // $this->firephp->log($_SESSION);
         $isLogin = $this->isLogin();
         $this->view();
     }
@@ -51,15 +45,9 @@ class Auth extends CI_Controller {
     }
 
     private function isLogin() {
-        // $this->firephp->log($this->session->all_userdata());
-        // $this->firephp->log($_SESSION['status']);
-       
         if (isset($_SESSION['status']) && $_SESSION['status'] == 'verified') {
             redirect(base_url('index.php/radio'));  
         }
-        /*if (isset($this->session->userdata['status']) && $this->session->userdata['status'] == 'verified') {
-            redirect(base_url('index.php/radio'));
-        }*/
         return false;
     }
 
