@@ -38,7 +38,7 @@ class ArrayToXML {
                 ArrayToXML::toXml($value, $rootNodeName, $node);
             } else {
                 // add single node.
-                $value = htmlentities($value);
+                // $value = htmlentities($value);
                 $xml->addChild($key, $value);
             }
 
